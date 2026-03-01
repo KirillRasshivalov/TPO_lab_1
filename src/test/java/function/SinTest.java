@@ -14,6 +14,7 @@ public class SinTest {
     private Sin sinCalculator;
     private static final double DELTA = 1e-10;
     private static final double PI = Math.PI;
+    private static final int ITERATIONS = 20;
 
     @BeforeEach
     void setUp() {
@@ -35,10 +36,10 @@ public class SinTest {
     @Test
     @DisplayName("Значения из кружка.")
     void testBasicSin() {
-        assertEquals(0.0, sinCalculator.sin(0, 15), DELTA);
-        assertEquals(1.0, sinCalculator.sin(PI / 2, 15), DELTA);
-        assertEquals(0.0, sinCalculator.sin(PI, 15), DELTA);
-        assertEquals(-1.0, sinCalculator.sin(PI + PI / 2, 15), DELTA);
+        assertEquals(0.0, sinCalculator.sin(0, ITERATIONS), DELTA);
+        assertEquals(1.0, sinCalculator.sin(PI / 2, ITERATIONS), DELTA);
+        assertEquals(0.0, sinCalculator.sin(PI, ITERATIONS), DELTA);
+        assertEquals(-1.0, sinCalculator.sin(PI + PI / 2, ITERATIONS), DELTA);
     }
 
     @Test
@@ -58,7 +59,7 @@ public class SinTest {
         Random random = new Random();
         for (int i = 0; i < 100; i++) {
             double x = random.nextDouble();
-            assertEquals(Math.sin(x), sinCalculator.sin(x, 30), DELTA);
+            assertEquals(Math.sin(x), sinCalculator.sin(x, ITERATIONS), DELTA);
         }
     }
 
@@ -68,7 +69,7 @@ public class SinTest {
         Random rand = new Random();
         for (int i = 0; i < 10; i++) {
             double x = rand.nextDouble();
-            assertEquals(sinCalculator.sin(-x, 15), -1 * sinCalculator.sin(x, 15), DELTA);
+            assertEquals(sinCalculator.sin(-x, ITERATIONS), -1 * sinCalculator.sin(x, ITERATIONS), DELTA);
         }
     }
 
@@ -76,7 +77,7 @@ public class SinTest {
     @DisplayName("Периодичности.")
     void testPeriod() {
         double x = 0.7;
-        assertEquals(sinCalculator.sin(x, 20), sinCalculator.sin(x + 2 * PI, 20), DELTA);
+        assertEquals(sinCalculator.sin(x, 20), sinCalculator.sin(x + 2 * PI, ITERATIONS), DELTA);
     }
 
     @Test
