@@ -20,4 +20,8 @@ public class Sin {
         }
         return tot;
     }
+
+    public double etalon_sinus(double x) {
+        return Math.sin(x);
+    }
 }
