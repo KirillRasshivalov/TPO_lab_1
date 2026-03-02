@@ -5,6 +5,7 @@ import algo.domain.enums.State;
 import algo.domain.model.Creature;
 
 public class CreatureFactory {
+
     public static Creature createWhale() {
         Creature creature = new Creature();
         creature.setSpecies(Species.WHALE);

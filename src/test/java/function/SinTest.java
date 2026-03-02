@@ -40,6 +40,7 @@ public class SinTest {
         assertEquals(1.0, sinCalculator.sin(PI / 2, ITERATIONS), DELTA);
         assertEquals(0.0, sinCalculator.sin(PI, ITERATIONS), DELTA);
         assertEquals(-1.0, sinCalculator.sin(PI + PI / 2, ITERATIONS), DELTA);
+        assertEquals(0.0, sinCalculator.sin(2 * PI, ITERATIONS), DELTA);
     }
 
     @Test

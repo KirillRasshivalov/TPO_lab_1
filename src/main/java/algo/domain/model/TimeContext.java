@@ -27,7 +27,6 @@ public class TimeContext {
     }
 
     public boolean isTimeRunningOut() {
-        return Duration.between(referenceTime, Instant.now())
-                .compareTo(availableTime) > 0;
+        return Duration.between(referenceTime, Instant.now()).compareTo(availableTime) > 0;
     }
 }

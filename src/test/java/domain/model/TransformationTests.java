@@ -3,7 +3,6 @@ package domain.model;
 import algo.domain.enums.Species;
 import algo.domain.enums.State;
 import algo.domain.enums.TransformationStatus;
-import algo.domain.model.Consciousness;
 import algo.domain.model.Creature;
 import algo.domain.model.Transformation;
 import algo.domain.model.TransformationStage;
