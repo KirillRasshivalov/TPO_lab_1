@@ -57,7 +57,7 @@ public class TransformationTest {
 
     @Test
     @DisplayName("Сценарий с ограниченным временем")
-    void testTimeConstrainedScenario() {
+    void testTimeConstrained() {
         Creature whale = CreatureFactory.createWhale();
         TimeContext timeContext = new TimeContext(
                 Duration.ofSeconds(1)
@@ -70,8 +70,7 @@ public class TransformationTest {
         Transformation transformation = transformationService
                 .startTransformation(whale, Species.NOT_WHALE);
         transformationService.completeTransformation(transformation);
-        assertTrue(whale.getTransformedAt().isBefore(
-                timeContext.getReferenceTime().plus(timeContext.getAvailableTime())
+        assertTrue(whale.getTransformedAt().isBefore(timeContext.getReferenceTime().plus(timeContext.getAvailableTime())
         ));
     }
 }
