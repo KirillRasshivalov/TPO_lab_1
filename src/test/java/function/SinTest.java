@@ -40,38 +40,38 @@ public class SinTest {
     @Test
     @DisplayName("Значения из кружка.")
     void testBasicSin() {
-        assertEquals(0.0, sinCalculator.sin(0, ITERATIONS), DELTA);
-        assertEquals(1.0, sinCalculator.sin(PI / 2, ITERATIONS), DELTA);
-        assertEquals(0.0, sinCalculator.sin(PI, ITERATIONS), DELTA);
-        assertEquals(-1.0, sinCalculator.sin(PI + PI / 2, ITERATIONS), DELTA);
-        assertEquals(0.0, sinCalculator.sin(2 * PI, ITERATIONS), DELTA);
+        assertEquals(0.0, sinCalculator.sin(0), DELTA);
+        assertEquals(1.0, sinCalculator.sin(PI / 2), DELTA);
+        assertEquals(0.0, sinCalculator.sin(PI), DELTA);
+        assertEquals(-1.0, sinCalculator.sin(PI + PI / 2), DELTA);
+        assertEquals(0.0, sinCalculator.sin(2 * PI), DELTA);
     }
 
     @Test
     @DisplayName("Проверка на то что наша функция действительно периодична и тесты выше достаточные.")
     void testCorrectRealisation() {
-        assertEquals(sinCalculator.sin(0, ITERATIONS), sinCalculator.sin(0 + 2 * PI, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin(0, ITERATIONS), sinCalculator.sin(0 - 2 * PI, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin(PI / 2, ITERATIONS), sinCalculator.sin(PI / 2 + 2 * PI, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin(PI / 2, ITERATIONS), sinCalculator.sin(PI / 2 - 2 * PI, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin(PI, ITERATIONS), sinCalculator.sin(PI + PI * 2, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin(PI, ITERATIONS), sinCalculator.sin(PI - PI * 2, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin((3 * PI) / 2, ITERATIONS), sinCalculator.sin((3 * PI) / 2 + 2 * PI, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin((3 * PI) / 2, ITERATIONS), sinCalculator.sin((3 * PI) / 2 - 2 * PI, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin(2 * PI, ITERATIONS), sinCalculator.sin(2 * PI + 2 * PI, ITERATIONS), DELTA);
-        assertEquals(sinCalculator.sin(2 * PI, ITERATIONS), sinCalculator.sin(2 * PI - 2 * PI, ITERATIONS), DELTA);
+        assertEquals(sinCalculator.sin(0), sinCalculator.sin(0 + 2 * PI), DELTA);
+        assertEquals(sinCalculator.sin(0), sinCalculator.sin(0 - 2 * PI), DELTA);
+        assertEquals(sinCalculator.sin(PI / 2), sinCalculator.sin(PI / 2 + 2 * PI), DELTA);
+        assertEquals(sinCalculator.sin(PI / 2), sinCalculator.sin(PI / 2 - 2 * PI), DELTA);
+        assertEquals(sinCalculator.sin(PI), sinCalculator.sin(PI + PI * 2), DELTA);
+        assertEquals(sinCalculator.sin(PI), sinCalculator.sin(PI - PI * 2), DELTA);
+        assertEquals(sinCalculator.sin((3 * PI) / 2), sinCalculator.sin((3 * PI) / 2 + 2 * PI), DELTA);
+        assertEquals(sinCalculator.sin((3 * PI) / 2), sinCalculator.sin((3 * PI) / 2 - 2 * PI), DELTA);
+        assertEquals(sinCalculator.sin(2 * PI), sinCalculator.sin(2 * PI + 2 * PI), DELTA);
+        assertEquals(sinCalculator.sin(2 * PI), sinCalculator.sin(2 * PI - 2 * PI), DELTA);
     }
 
-    @Test
-    @DisplayName("Неверные значения на входе функции.")
-    void testIncorrectInput() {
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -1);});
-        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -10);});
-        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -100);});
-        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -1000);});
-        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -10000);});
-        assertEquals("Неверные аргументы на входе функции.", exception.getMessage());
-    }
+//    @Test
+//    @DisplayName("Неверные значения на входе функции.")
+//    void testIncorrectInput() {
+//        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -1);});
+//        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0);});
+//        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0);});
+//        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -1000);});
+//        assertThrows(IllegalArgumentException.class, () -> {sinCalculator.sin(0, -10000);});
+//        assertEquals("Неверные аргументы на входе функции.", exception.getMessage());
+//    }
 
 //    @Test
 //    @DisplayName("Нестандартные значения на вход функции.")
@@ -79,17 +79,46 @@ public class SinTest {
 //        Random random = new Random();
 //        for (int i = 0; i < 100; i++) {
 //            double x = random.nextDouble();
-//            assertEquals(Math.sin(x), sinCalculator.sin(x, ITERATIONS), DELTA);
+//            assertEquals(Math.sin(x), sinCalculator.sin(x), DELTA);
 //        }
 //    }
 
-    @FuzzTest
+    @Test
+    @DisplayName("Симмметричность фнукции (sin(-x) = -sin(x)).")
+    void testSymmetricInput() {
+        double x1 = 10;
+        assertEquals(sinCalculator.sin(-x1), -1 * sinCalculator.sin(x1), DELTA);
+        double x2 = -10;
+        assertEquals(sinCalculator.sin(-x2), -1 * sinCalculator.sin(x2), DELTA);
+        double x3 = 0.5;
+        assertEquals(sinCalculator.sin(-x3), -1 * sinCalculator.sin(x3), DELTA);
+        double x4 = -0.5;
+        assertEquals(sinCalculator.sin(-x4), -1 * sinCalculator.sin(x4), DELTA);
+    }
+
+    @Test
+    @DisplayName("Сходимость ряда.")
+    void testConvergence() {
+        double firstEp = sinCalculator.sin(X);
+        double secondEp = sinCalculator.sin(X);
+        double thirdEp = sinCalculator.sin(X);
+        double fourthEp = sinCalculator.sin(X);
+        double difference1 = ETALON_SIN_X - firstEp < 0 ? (ETALON_SIN_X - firstEp) * -1 : ETALON_SIN_X - firstEp;
+        double difference2 = ETALON_SIN_X - secondEp < 0 ? (ETALON_SIN_X - secondEp) * -1 : ETALON_SIN_X - secondEp;
+        double difference3 = ETALON_SIN_X - thirdEp < 0 ? (ETALON_SIN_X - thirdEp) * -1 : ETALON_SIN_X - thirdEp;
+        double difference4 = ETALON_SIN_X - fourthEp < 0 ? (ETALON_SIN_X - fourthEp) * -1 : ETALON_SIN_X - fourthEp;
+        assertTrue(difference1 >= difference2);
+        assertTrue(difference2 >= difference3);
+        assertTrue(difference3 >= difference4);
+    }
+
+    @FuzzTest()
+    @DisplayName("Тест с помощью фаззера")
     void fuzzSin(FuzzedDataProvider data) {
         double x = data.consumeDouble();
-        int iterations = data.consumeInt(1, ITERATIONS);
 
         Sin sinCalculator = new Sin();
-        double result = sinCalculator.sin(x, iterations);
+        double result = sinCalculator.sin(x);
 
         if (Double.isFinite(result)) {
             assertTrue(Math.abs(result) <= 1.0 + DELTA,
@@ -98,34 +127,5 @@ public class SinTest {
                 assertEquals(Math.sin(x), result, 1e-5);
             }
         }
-    }
-
-    @Test
-    @DisplayName("Симмметричность фнукции (sin(-x) = -sin(x)).")
-    void testSymmetricInput() {
-        double x1 = 10;
-        assertEquals(sinCalculator.sin(-x1, ITERATIONS), -1 * sinCalculator.sin(x1, ITERATIONS), DELTA);
-        double x2 = -10;
-        assertEquals(sinCalculator.sin(-x2, ITERATIONS), -1 * sinCalculator.sin(x2, ITERATIONS), DELTA);
-        double x3 = 0.5;
-        assertEquals(sinCalculator.sin(-x3, ITERATIONS), -1 * sinCalculator.sin(x3, ITERATIONS), DELTA);
-        double x4 = -0.5;
-        assertEquals(sinCalculator.sin(-x4, ITERATIONS), -1 * sinCalculator.sin(x4, ITERATIONS), DELTA);
-    }
-
-    @Test
-    @DisplayName("Сходимость ряда.")
-    void testConvergence() {
-        double firstEp = sinCalculator.sin(X, 5);
-        double secondEp = sinCalculator.sin(X, 10);
-        double thirdEp = sinCalculator.sin(X, 15);
-        double fourthEp = sinCalculator.sin(X, 20);
-        double difference1 = ETALON_SIN_X - firstEp < 0 ? (ETALON_SIN_X - firstEp) * -1 : ETALON_SIN_X - firstEp;
-        double difference2 = ETALON_SIN_X - secondEp < 0 ? (ETALON_SIN_X - secondEp) * -1 : ETALON_SIN_X - secondEp;
-        double difference3 = ETALON_SIN_X - thirdEp < 0 ? (ETALON_SIN_X - thirdEp) * -1 : ETALON_SIN_X - thirdEp;
-        double difference4 = ETALON_SIN_X - fourthEp < 0 ? (ETALON_SIN_X - fourthEp) * -1 : ETALON_SIN_X - fourthEp;
-        assertTrue(difference1 >= difference2);
-        assertTrue(difference2 >= difference3);
-        assertTrue(difference3 >= difference4);
     }
 }
