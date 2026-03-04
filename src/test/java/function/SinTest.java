@@ -1,6 +1,8 @@
 package function;
 
 import algo.function.Sin;
+import com.code_intelligence.jazzer.api.FuzzedDataProvider;
+import com.code_intelligence.jazzer.junit.FuzzTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,13 +73,30 @@ public class SinTest {
         assertEquals("Неверные аргументы на входе функции.", exception.getMessage());
     }
 
-    @Test
-    @DisplayName("Нестандартные значения на вход функции.")
-    void testComplicatedInput() {
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            double x = random.nextDouble();
-            assertEquals(Math.sin(x), sinCalculator.sin(x, ITERATIONS), DELTA);
+//    @Test
+//    @DisplayName("Нестандартные значения на вход функции.")
+//    void testComplicatedInput() {
+//        Random random = new Random();
+//        for (int i = 0; i < 100; i++) {
+//            double x = random.nextDouble();
+//            assertEquals(Math.sin(x), sinCalculator.sin(x, ITERATIONS), DELTA);
+//        }
+//    }
+
+    @FuzzTest
+    void fuzzSin(FuzzedDataProvider data) {
+        double x = data.consumeDouble();
+        int iterations = data.consumeInt(1, ITERATIONS);
+
+        Sin sinCalculator = new Sin();
+        double result = sinCalculator.sin(x, iterations);
+
+        if (Double.isFinite(result)) {
+            assertTrue(Math.abs(result) <= 1.0 + DELTA,
+                    String.format("Sin value %f out of bounds for x=%f", result, x));
+            if (Math.abs(x) < 20.0) {
+                assertEquals(Math.sin(x), result, 1e-5);
+            }
         }
     }
 
